@@ -29,7 +29,9 @@ class App extends React.Component {
 		$.post(`http://localhost:3000`, {}, (resObjData, statusStr) => {
 			return resObjData.json();
 		})
+		// if successful setstate with new bug added
 			.then((bug)=> {this.setState({bugs: [...this.state.bugs, bug]})})
+			.catch(err => console.log(err))
 	}
 
 	bugFilter() {
