@@ -59,10 +59,10 @@ class App extends React.Component {
 	bugSubmitHandler (e, newBug) {
 		e.preventDefault();
 		// send post request
-		fetch('http://localhost:3000/bugs', {
+		console.log('newBug: ' + newBug)
+		fetch('http://localhost:3000/api/bugs', {
 			method: 'POST',
-			mode: 'cors',
-			cache: 'no-cache',
+			mode: '*/*',
 			headers: {'content-Type': `application/json` },
 			body: JSON.stringify(newBug)
 		})
@@ -74,14 +74,17 @@ class App extends React.Component {
 	}
 
 	getBugs () {
+		console.log('getBugs has started')
 		fetch(`http://localhost:3000/bugs`)
-			.then( result => {
-				result = result.json();
-				console.log('results of get fetch: ' + result)
-
-				this.setState({bugs: result})
+			.then( response => {
+				console.log('fetch has completed')
+				return response.json();
 			})
-			.catch(err => console.log(err));
+				.then(result => {
+					console.log('results of get fetch: ' + result)
+					this.setState({bugs: result})
+				})
+				.catch(err => console.log(err));
 	}
 	
 	componentDidMount() {

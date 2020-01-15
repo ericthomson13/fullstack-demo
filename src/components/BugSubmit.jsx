@@ -13,7 +13,7 @@ class BugSubmit extends React.Component {
 	// add change handler that gets used in each field to update state
 	// hopefully this can work for all fields to accept changes rather than one for each field
 	inputChangeHandler(input, location) {
-		// console.log(input);
+		console.log(input);
 		this.setState({location: input})
 	}
 	// use submit handler from app to do post request to server
@@ -34,7 +34,7 @@ class BugSubmit extends React.Component {
 	          <option value="Important">Important</option>
 	          <option value="Critical">Critical</option>
 	        </select>
-				<button onClick={(e) => this.props.bugSubmitHandler(e, this.state)}>Submit Bug</button>
+				<button onClick={(e) => this.props.bugSubmitHandler(e, {...this.state})}>Submit Bug</button>
 			</form>
 		)
 	}

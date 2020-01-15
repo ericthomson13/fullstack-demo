@@ -4,13 +4,15 @@ const bp = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+
+
+// SERVER APP CONSTRUCTION
 const app = express();
 app.use(cors);
 app.use(bp.json());
 
 
-
-app.get(`/bugs`, (req, res) => {
+app.get('/bugs', (req, res) => {
 	console.log('new get req in progress' + req.body.id);
 	BugModel.find((err, bugs) => {
 		if (err) {
@@ -43,7 +45,7 @@ app.post(`/bugs`, (req, res) => {
 
 app.listen(port, () => console.log(`Server is listening on port ${port}`));
 
-
+//SCHEMA CONSTRUCTION
 const BugSchema = new mongoose.Schema({
 	id: Number,
 	description: String,
@@ -52,7 +54,7 @@ const BugSchema = new mongoose.Schema({
 	assignment: String,
 	threatLevel: String
 })
-mongoose.connect('mongodb://localhost:27017/bugs', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost:27017/bugs', {useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
 db.on('error', () => console.log('connection error'));
 db.once('open', () => {
