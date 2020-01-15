@@ -1,6 +1,7 @@
 import React from 'react';
 import Nav from './Nav.jsx';
 import BugTile from './BugTile.jsx';
+import BugSubmit from './BugSubmit.jsx';
 import exampleData from '../example-data/exampleData';
 
 import '../styles/App.scss';
@@ -20,8 +21,11 @@ class App extends React.Component {
     this.setState({ filter });
   }
 
+	// bugSubmitHandler(newBug) {
+
+	// }
+
 	bugFilter() {
-		console.log('filter: ' + this.state.filter)
 		if (this.state.filter === 'None') {
 			return this.state.bugs.map((bug) => (
 				<BugTile
@@ -35,11 +39,9 @@ class App extends React.Component {
 				/>
 			))
 		} else {
-			
 			const filtered = this.state.bugs.filter(bug => {
 				return bug.threatLevel === this.state.filter
 			})
-			console.log('filtered bugs: ' + filtered[0].threatLevel)
 			return filtered.map(bug => {
 				return (
 					<BugTile
@@ -57,12 +59,16 @@ class App extends React.Component {
 	}
   render() {
     return (
-      <table>
-        <Nav
-          filterHandler={this.filterHandler}
-        />
-        {this.bugFilter()}
-      </table>
+			<div>
+	      <table>
+	        <Nav
+	          filterHandler={this.filterHandler}
+	        />
+	        {this.bugFilter()}
+					
+	      </table>
+				<BugSubmit />
+			</div>
     );
   }
 }
