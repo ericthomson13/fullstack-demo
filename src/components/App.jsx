@@ -2,37 +2,26 @@ import React from 'react';
 import Nav from './Nav.jsx';
 import BugTile from './BugTile.jsx';
 import BugSubmit from './BugSubmit.jsx';
-import exampleData from '../example-data/exampleData';
-import $ from 'jquery';
+// import exampleData from '../example-data/exampleData';
 
 import '../styles/App.scss';
 
 class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       filter: 'None',
-			bugs: exampleData,
+			bugs: [],
     };
 		this.filterHandler = this.filterHandler.bind(this);
 		this.bugFilter = this.bugFilter.bind(this);
 		this.bugSubmitHandler = this.bugSubmitHandler.bind(this);
+		this.getBugs = this.getBugs.bind(this);
   }
 
   filterHandler(filter) {
     this.setState({ filter });
   }
-
-	bugSubmitHandler(e, newBug) {
-		e.preventDefault();
-		// send post request
-		$.post(`http://localhost:3000`, {}, (resObjData, statusStr) => {
-			return resObjData.json();
-		})
-		// if successful setstate with new bug added
-			.then((bug)=> {this.setState({bugs: [...this.state.bugs, bug]})})
-			.catch(err => console.log(err))
-	}
 
 	bugFilter() {
 		if (this.state.filter === 'None') {
@@ -66,6 +55,40 @@ class App extends React.Component {
 			})
 		}
 	}
+
+	bugSubmitHandler (e, newBug) {
+		e.preventDefault();
+		// send post request
+		fetch('http://localhost:3000/bugs', {
+			method: 'POST',
+			mode: 'cors',
+			cache: 'no-cache',
+			headers: {'content-Type': `application/json` },
+			body: JSON.stringify(newBug)
+		})
+			.then(result => {
+				result = result.json();
+				this.setState({bugs: [...this.state.bugs, result]})
+			})
+			.catch(err => console.log(err))
+	}
+
+	getBugs () {
+		fetch(`http://localhost:3000/bugs`)
+			.then( result => {
+				result = result.json();
+				console.log('results of get fetch: ' + result)
+
+				this.setState({bugs: result})
+			})
+			.catch(err => console.log(err));
+	}
+	
+	componentDidMount() {
+		console.log('component did mount running ')
+		this.getBugs();
+	}
+		
   render() {
     return (
 			<div>
