@@ -3,6 +3,7 @@ import Nav from './Nav.jsx';
 import BugTile from './BugTile.jsx';
 import BugSubmit from './BugSubmit.jsx';
 import exampleData from '../example-data/exampleData';
+import $ from 'jquery';
 
 import '../styles/App.scss';
 
@@ -15,15 +16,21 @@ class App extends React.Component {
     };
 		this.filterHandler = this.filterHandler.bind(this);
 		this.bugFilter = this.bugFilter.bind(this);
+		this.bugSubmitHandler = this.bugSubmitHandler.bind(this);
   }
 
   filterHandler(filter) {
     this.setState({ filter });
   }
 
-	// bugSubmitHandler(newBug) {
-
-	// }
+	bugSubmitHandler(e, newBug) {
+		e.preventDefault();
+		// send post request
+		$.post(`http://localhost:3000`, {}, (resObjData, statusStr) => {
+			return resObjData.json();
+		})
+			.then((bug)=> {this.setState({bugs: [...this.state.bugs, bug]})})
+	}
 
 	bugFilter() {
 		if (this.state.filter === 'None') {
@@ -65,9 +72,8 @@ class App extends React.Component {
 	          filterHandler={this.filterHandler}
 	        />
 	        {this.bugFilter()}
-					
 	      </table>
-				<BugSubmit />
+				<BugSubmit bugSubmitHandler={this.BugSubmitHandler}/>
 			</div>
     );
   }

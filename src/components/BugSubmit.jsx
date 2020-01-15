@@ -4,35 +4,38 @@ class BugSubmit extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-
+			description: '',
+			reporter: '',
+			assignment: '',
+			threatLevel: 'None'
 		}
 	}
 	// add change handler that gets used in each field to update state
 	// hopefully this can work for all fields to accept changes rather than one for each field
-	// inputChangeHandler(input, location) {
-	// 	location = location.toString();
-	// 	this.setState(location: input)
-	// }
+	inputChangeHandler(input, location) {
+		// console.log(input);
+		this.setState({location: input})
+	}
 	// use submit handler from app to do post request to server
 	// render function to render component with all input fields
 	render () {
 		return (
-			<div className="submit-bug">
+			<form className="submit-bug">
 				<label>Description</label>
-				<input className="submit-description"></input>
+				<input className="submit-description" onChange={(e) => this.inputChangeHandler(e.target.value, 'description')}></input>
 				<label>Reported By</label>
-				<input className="submit-reporter"></input>
+				<input className="submit-reporter" onChange={(e) => this.inputChangeHandler(e.target.value, 'reporter')}></input>
 				<label>Assigned To</label>
-				<input className="team-member"></input>
+				<input className="assignment" onChange={(e) => this.inputChangeHandler(e.target.value, 'assignment')}></input>
 				<label>ThreatLevel</label>
-					<select id="submitList">
+					<select id="submitList" onChange={(e) => this.inputChangeHandler(e.target.value, 'threatLevel')}>
 	          <option value="None"></option>
 	          <option value="Low-Priority">Low-Priority</option>
 	          <option value="Important">Important</option>
 	          <option value="Critical">Critical</option>
 	        </select>
-				<button onClick >Submit Bug</button>
-			</div>
+				<button onClick={(e) => this.props.bugSubmitHandler(e, this.state)}>Submit Bug</button>
+			</form>
 		)
 	}
 }
