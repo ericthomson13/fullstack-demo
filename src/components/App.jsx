@@ -27,19 +27,17 @@ class App extends React.Component {
 	bugFilter() {
 		if (this.state.filter === 'None') {
 			return this.state.bugs.map((bug) => {
-				if (bug.id === undefined) {
-					Math.floor(Math.Random * 100)
+				if (!!bug.id) {
+					bug.id = Math.floor(Math.Random * 100)
 				}
 			return (
 				<BugTile
-					// issue is with bugName below
 					bugName={bug.id}
 					bugDescription={bug.description}
 					reportedBy={bug.reporter}
 					creationTime={bug.creationTime}
 					assignedTo={bug.assignment}
 					threatLevel={bug.threatLevel}
-					key={bug.id}
 				/>
 			)})
 		} else {
@@ -47,7 +45,7 @@ class App extends React.Component {
 				return bug.threatLevel === this.state.filter
 			})
 			return filtered.map(bug => {
-				if (bug.id === undefined) {
+				if (!!bug.id) {
 					bug.id = Math.floor(Math.Random * 100);
 				}
 				return (
@@ -58,7 +56,6 @@ class App extends React.Component {
 						creationTime={Date.parse(bug.creationTime)}
 						assignedTo={bug.assignment}
 						threatLevel={bug.threatLevel}
-						key={bug.id}
 					/>
 				)
 			})

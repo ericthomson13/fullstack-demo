@@ -26,7 +26,7 @@ app.get('/bugs', (req, res) => {
 // idnum to be incremented and decremented on create/delete
 var idnum = 6;
 app.post('/bugs', (req, res) => {
-	console.log('new post req in progress: ' + req.body)
+	// console.log('new post req in progress: ' + req.body)
 	idnum++;
 	const newBug = new BugModel({
 		description: req.body.description,
