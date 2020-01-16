@@ -12,6 +12,7 @@ class App extends React.Component {
     this.state = {
       filter: 'None',
 			bugs: [],
+			filtered: []
     };
 		this.filterHandler = this.filterHandler.bind(this);
 		this.bugFilter = this.bugFilter.bind(this);
@@ -25,31 +26,39 @@ class App extends React.Component {
 
 	bugFilter() {
 		if (this.state.filter === 'None') {
-			return this.state.bugs.map((bug) => (
+			return this.state.bugs.map((bug) => {
+				if (bug.id === undefined) {
+					Math.floor(Math.Random * 100)
+				}
+			return (
 				<BugTile
-					bugName={bug.bugName}
-					bugDescription={bug.bugDescription}
-					reportedBy={bug.reportedBy}
-					createdDate={bug.createdDate}
-					assignedTo={bug.assignedTo}
+					// issue is with bugName below
+					bugName={bug.id}
+					bugDescription={bug.description}
+					reportedBy={bug.reporter}
+					creationTime={bug.creationTime}
+					assignedTo={bug.assignment}
 					threatLevel={bug.threatLevel}
-					key={bug.bugName}
+					key={bug.id}
 				/>
-			))
+			)})
 		} else {
 			const filtered = this.state.bugs.filter(bug => {
 				return bug.threatLevel === this.state.filter
 			})
 			return filtered.map(bug => {
+				if (bug.id === undefined) {
+					bug.id = Math.floor(Math.Random * 100);
+				}
 				return (
 					<BugTile
-						bugName={bug.bugName}
-						bugDescription={bug.bugDescription}
-						reportedBy={bug.reportedBy}
-						createdDate={bug.createdDate}
-						assignedTo={bug.assignedTo}
+						bugName={bug.id}
+						bugDescription={bug.description}
+						reportedBy={bug.reporter}
+						creationTime={Date.parse(bug.creationTime)}
+						assignedTo={bug.assignment}
 						threatLevel={bug.threatLevel}
-						key={bug.bugName}
+						key={bug.id}
 					/>
 				)
 			})
@@ -60,35 +69,36 @@ class App extends React.Component {
 		e.preventDefault();
 		// send post request
 		console.log('newBug: ' + newBug)
-		fetch('http://localhost:3000/api/bugs', {
+		fetch('http://localhost:3000/bugs', {
 			method: 'POST',
-			mode: '*/*',
-			headers: {'content-Type': `application/json` },
+			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify(newBug)
-		})
+		}, () =>{ console.log('submit fetch is not a lame dog lost in the internet')})
 			.then(result => {
 				result = result.json();
-				this.setState({bugs: [...this.state.bugs, result]})
 			})
+				.then( result => {
+					return this.setState({bugs: [...this.state.bugs, result]})
+				})
 			.catch(err => console.log(err))
 	}
 
 	getBugs () {
-		console.log('getBugs has started')
+		// console.log('getBugs has started')
 		fetch(`http://localhost:3000/bugs`)
 			.then( response => {
-				console.log('fetch has completed')
+				// console.log('fetch has completed')
 				return response.json();
 			})
 				.then(result => {
-					console.log('results of get fetch: ' + result)
+					// console.log('results of get fetch: ' + Object.keys(result[0]))
 					this.setState({bugs: result})
 				})
 				.catch(err => console.log(err));
 	}
 	
 	componentDidMount() {
-		console.log('component did mount running ')
+		// console.log('component did mount running ')
 		this.getBugs();
 	}
 		
@@ -101,7 +111,7 @@ class App extends React.Component {
 	        />
 	        {this.bugFilter()}
 	      </table>
-				<BugSubmit bugSubmitHandler={this.BugSubmitHandler}/>
+				<BugSubmit bugSubmitHandler={this.bugSubmitHandler}/>
 			</div>
     );
   }

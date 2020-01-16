@@ -8,32 +8,32 @@ const cors = require('cors');
 
 // SERVER APP CONSTRUCTION
 const app = express();
-app.use(cors);
+app.use(cors());
 app.use(bp.json());
 
 
 app.get('/bugs', (req, res) => {
-	console.log('new get req in progress' + req.body.id);
+	// console.log('new get req in progress' + Object.keys(req));
 	BugModel.find((err, bugs) => {
 		if (err) {
 			res.send(err);
 		} else {
-			res.send(bugs, 200);
+			res.send(bugs);
 		}
 	})
 });
 
 // idnum to be incremented and decremented on create/delete
 var idnum = 6;
-app.post(`/bugs`, (req, res) => {
-	console.log('new post req in progress: ' + req.body.id)
+app.post('/bugs', (req, res) => {
+	console.log('new post req in progress: ' + req.body)
 	idnum++;
 	const newBug = new BugModel({
-		id: idnum, 
 		description: req.body.description,
 		reporter: req.body.reporter,
 		assignment: req.body.assignment
 	})
+
 	newBug.save((err, newBug)=> {
 		if (err) {
 			res.sendStatus(err);

@@ -6,7 +6,7 @@ const BugTile = (props) => (
       <td>{props.bugName}</td>
       <td>{props.bugDescription}</td>
       <td>{props.reportedBy}</td>
-      <td>{props.createdDate}</td>
+      <td>{props.creationTime}</td>
       <td>{props.assignedTo}</td>
       <td>{props.threatLevel}</td>
     </tr>
